@@ -1,3 +1,4 @@
+const isNumeric = (val) => Number(parseFloat(val)).toString() === val;
 
 /**
  * Plugin allows to handle bulk actions on Magento quote
@@ -17,24 +18,24 @@ module.exports = ({ config, db, router, cache, apiStatus, apiError, getRestApiCl
             const module = {};
             module.updateBulk = function (cartId, cartItems, customerToken) {
                 if (customerToken && isNumeric(cartId)) {
-                    return restClient.post('/V1/carts/' + cartId + '/items-multiple', { cartItem: cartItems }, customerToken);
+                    return restClient.post('/carts/' + cartId + '/items-multiple', { cartItem: cartItems }, customerToken);
                 } else {
-                    return restClient.post('/V1/guest-carts/' + cartId + '/items-multiple', { cartItem: cartItems });
+                    return restClient.post('/guest-carts/' + cartId + '/items-multiple', { cartItem: cartItems });
                 }
             };
 
             module.deleteBulk = function (cartId, itemIds, customerToken) {
                 if (itemIds) {
                     if (customerToken && isNumeric(cartId)) {
-                        return restClient.delete('/V1/carts/' + cartId + '/items-multiple', {itemIds}, customerToken);
+                        return restClient.post('/carts/' + cartId + '/items-delete-multiple', { itemIds }, customerToken);
                     } else {
-                        return restClient.delete('/V1/guest-carts/' + cartId + '/items-multiple', {itemIds});
+                        return restClient.post('/guest-carts/' + cartId + '/items-delete-multiple', { itemIds });
                     }
                 } else {
                     if (customerToken && isNumeric(cartId)) {
-                        return restClient.delete('/V1/carts/' + cartId + '/items-all', null, customerToken);
+                        return restClient.delete('/carts/' + cartId + '/items-all', customerToken);
                     } else {
-                        return restClient.delete('/V1/guest-carts/' + cartId + '/items-all');
+                        return restClient.delete('/guest-carts/' + cartId + '/items-all');
                     }
                 }
             };
