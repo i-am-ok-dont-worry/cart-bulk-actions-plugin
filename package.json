@@ -1,9 +1,9 @@
 {
-  "name": "vsf-api-plugin-template",
-  "pluginname": "VSF api plugin",
-  "companyname": "",
+  "name": "cart-bulk-actions-plugin",
+  "pluginname": "cart-bulk-actions-plugin",
+  "companyname": "grupakmk",
   "version": "1.0.0",
-  "description": "Template for VSF api plugin",
+  "description": "Plugin for handling bulk actions on quote",
   "main": "src/index.js",
   "scripts": {
     "test": "test",
