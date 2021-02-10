@@ -1,24 +1,29 @@
-# Plugin template
-This repository is a template for VueStorefrontApi plugin.
+# Cart bulk actions plugin
+Provides support for bulk actions on quote items such as:
+- add to cart multiple products
+- update multiple cart items
+- delete multiple cart items
+- clear quote
 
-## Entry point
-Entry point for plugin is a /src/index.js file. It contains a template function
-for api plugin.
+## API
+Plugin exposes endpoints:
+* `POST /vendor/cart-bulk/{{cartId}}` - adds or updates multiple products at once
+* `DELETE /vendor/cart-bulk/{{cartId}}` - removes multiple products from quote or clears quote
 
-## Write a plugin
-Plugin receives various props including:
-* config - api configuration
-* db - elasticsearch client
-* router - express router
-* cache - cache manager instance
-* apiStatus - rest api response helper func
-* apiError - rest api error response helper func
-* getRestApiClient - method which returns Magento Rest Client
+## Bulk add
+To add multiple products at once:
+POST on `/vendor/cart-bulk/{{cartId}}`
+* request body: `[{ sku: string, qty: string, quoteId: string }]`
 
-# IMPORTANT!
-- `package.json` must contain `pluginname` entry which describes plugin name
-- `package.json` must contain valid company info e.g.:
-```
-"companyname": "grupakmk"
-```
+## Bulk update
+To add multiple products at once:
+POST on `/vendor/cart-bulk/{{cartId}}`
+* request body: `[{ sku: string, qty: string, quoteId: string, item_id: string }]`
 
+## Bulk delete
+To remove multiple cart items from quote at once:
+DELETE on `/vendor/cart-bulk/{{cartId}}`
+* request body: `[{{itemId}}]`
+
+To clear whole quote:
+DELETE on `/vendor/cart-bulk/{{cartId}}` with empty body
