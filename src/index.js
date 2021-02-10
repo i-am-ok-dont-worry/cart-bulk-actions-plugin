@@ -80,7 +80,7 @@ module.exports = ({ config, db, router, cache, apiStatus, apiError, getRestApiCl
      * Items that were not added or updated are extended with 'error' property
      */
     router.delete('/:cartId', (req, res) => {
-        const cartItems = req.body;
+        const cartItems = req.body && req.body instanceof Array ? req.body : null;
         const { token } = req.query;
         const { cartId } = req.params;
         const client = createMage2RestClient();
