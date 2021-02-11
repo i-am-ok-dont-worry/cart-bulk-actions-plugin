@@ -40,6 +40,10 @@ module.exports = ({ config, db, router, cache, apiStatus, apiError, getRestApiCl
                 }
             };
 
+            module.reorder = function (cartId, orderIncrementId, customerToken) {
+                return restClient.post('/carts/' + cartId + '/items-from-order/' + orderIncrementId, { cartId }, customerToken);
+            };
+
             return module;
         });
 
@@ -62,6 +66,28 @@ module.exports = ({ config, db, router, cache, apiStatus, apiError, getRestApiCl
         const client = createMage2RestClient();
         try {
             client.cartBulk.updateBulk(cartId, cartItems, token)
+                .then(response => apiStatus(res, response, 200))
+                .catch(err => apiError(res, err));
+        } catch (e) {
+            apiError(res, e);
+        }
+    });
+
+    /**
+     * Adds or updates multiple objects in quote
+     *
+     * @req.query.token user token
+     * @req.body cart items to add or update
+     *
+     * @returns {{item_id?: string, qty: number, sku: string, error?: string }[]} list of products that were passed through the method.
+     * Items that were not added or updated are extended with 'error' property
+     */
+    router.post('/:cartId/reorder/:orderIncrementId', (req, res) => {
+        const { token } = req.query;
+        const { cartId, orderIncrementId } = req.params;
+        const client = createMage2RestClient();
+        try {
+            client.cartBulk.reorder(cartId, orderIncrementId, token)
                 .then(response => apiStatus(res, response, 200))
                 .catch(err => apiError(res, err));
         } catch (e) {
